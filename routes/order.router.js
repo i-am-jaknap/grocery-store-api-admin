@@ -6,7 +6,6 @@ const router=Router();
 
 router.get('/',orderController.fetch);
 router.get('/:value',orderController.fetch);
-router.post('/',orderController.create);
 router.put('/:orderId',orderController.update);
 router.delete('/:orderId',orderController.delete);
 

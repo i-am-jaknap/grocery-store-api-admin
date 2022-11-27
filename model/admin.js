@@ -7,7 +7,7 @@ const Schema = mongoose.Schema;
 
 
 
-const userSchema=new Schema({
+const adminSchema=new Schema({
     firstname:{
         type:String,
         require:[true,'First name is required.'],
@@ -34,41 +34,27 @@ const userSchema=new Schema({
         maxLength:[30,'Password should be at most 30 letters long'],
         required:[true,'Password is required.'],
     },
-    address:{
-        type:String,
-    },
-    profile_pic:{
-        type:String,
-        default:'',
-    },
-    orders:{
-        type:[{order_id:String,product:String, price:Number, quantity:Number, status:String, image:String, status:String, description:String}],
-
-    },
-    cart:{
-        type:[{cart_item_id:String,product:String,price:Number,image:String,description:String}],
-    }
 
 },{versionKey:false});
 
-userSchema.pre('save',  function(next){
+adminSchema.pre('save',  function(next){
 
     if(!this.isModified('password')){
         return next();
     } 
-    const user = this;
+    const admin = this;
 
     bcrypt.genSalt(10, async function(err, salt){
         if (err){ return next(err) }
 
         try{
-            const hash= await bcrypt.hash(user.password, salt);
-            user.password = hash;
+            const hash= await bcrypt.hash(admin.password, salt);
+            admin.password = hash;
             return  next();
         }catch(err){
-            return next(err)
+            return next(err);
         }
     })
 })
 
-module.exports=mongoose.model('User',userSchema);
+module.exports=mongoose.model('Admin',adminSchema);

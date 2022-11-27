@@ -1,5 +1,5 @@
 const {Router}=require('express');
-const User=require('../model/user');
+const Admin=require('../model/admin');
 const jwt=require('jsonwebtoken');
 const bcrypt=require('bcrypt');
 
@@ -8,18 +8,18 @@ const router=Router();
 
 exports.signup= async(req,res)=>{
 
-    const user=req.body;
+    const admin=req.body;
 
     //check if email is already registered
-    const oldUser=await User.findOne({email:user.email});
-    if(oldUser){
-        return res.status(409).json({message:'User already exist. Please login.'})
+    const oldAdmin=await Admin.findOne({email:admin.email});
+    if(oldAdmin){
+        return res.status(409).json({message:'Admin already exist. Please login.'})
     }
 
-    //if not then create a new user with the given data
+    //if not then create a new admin with the given data
     try{
-        const newUser=new User({... user})
-        const data=await newUser.save();
+        const newAdmin=new Admin({... admin})
+        const data=await newAdmin.save();
         res.json(data);
 
     }catch(err){
@@ -39,20 +39,20 @@ exports.signin=async (req,res)=>{
     }
 
     //
-    const user=await User.findOne({email:req.body.email});
+    const admin=await Admin.findOne({email:req.body.email});
 
-    if(!user){
+    if(!admin){
         return res.status(401).json({message:"Email or password is wrong."});
     }
 
     //check if password matches
-    if(!await bcrypt.compare(req.body.password, user.password)){
+    if(!await bcrypt.compare(req.body.password, admin.password)){
         return res.status(401).json({message:"Email or password is wrong."});
     }
 
     //creating a new jwt token
    const token= jwt.sign(
-        { user_id:user._id,email:user.email},
+        { admin_id:admin._id,email:admin.email},
         process.env.SECRET_KEY,
         {
             expiresIn:'30d',

@@ -2,13 +2,15 @@ const express=require('express');
 const middlewares=require('../middleware/index');
 const {port}=require('../config/vars');
 const routes=require("../routes/index");
+const morgan= require('morgan');
 
 
 
 
 const app=express();
 
-
+//adding the morgan logger
+app.use(morgan('short'));
    
 app.use(middlewares());
 app.use(routes);

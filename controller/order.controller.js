@@ -4,34 +4,9 @@ const User=require('../model/user');
 const uuid=require('uuid');
 const order = require('../model/order');
 
-exports.create= async (req,res,next)=>{
-    const data=req.body;
-    data.order_id=uuid.v4();
 
-    try{
-       
-        //making shure that user exists
-        if(!await User.findOne({email:data.user})){
-            return res.status(400).json({'message':"Invalid user email."});
-        }
 
-        //add the order to the user's order list
-        await User.updateOne({email:data.user},{$push:{orders:data}});
-        const orderModel=new Order(data);
-
-        try{
-            const savedDoc= await orderModel.save();
-            res.status(201).json(savedDoc);
-
-        }catch(err){
-            console.log(err);
-            res.status(400).json({message:err.message})
-        }
-    }catch(err){
-        next(err);
-    }
-}
-
+///can only change the status of the order
 exports.update=async(req,res)=>{
     try{
         const orders=await Order.findOneAndUpdate({order_id:req.params.orderId},{$set:{status:req.body.status}});
@@ -100,22 +75,25 @@ exports.fetch=async(req,res,next)=>{
 exports.delete=async(req,res)=>{
     try{
         const orderId=req.params.orderId;
-        const deletedOrder= await Order.findOneAndDelete({order_id:orderId})
+        const deletedOrder= await Order.findOneAndDelete({order_id:orderId});
         console.log(deletedOrder);
 
         if(deletedOrder){
-            const upadteResult= await User.updateOne({
+            const updatedResult= await User.updateOne({
                                                         email:deletedOrder.user
                                                      },
                                                     {$pull:
                                                         {orders:
                                                             {
-                                                                order:deletedOrder.order_id
+                                                                order_id:deletedOrder.order_id
                                                             }
                                                         }
                                                     });
 
-            if(upadteResult.modifiedCount>0){
+            console.log(updatedResult);
+
+
+            if(updatedResult.modifiedCount>0){
                 return res.status(200).json({'message':"Order deleted successfully."});
             }
         }      

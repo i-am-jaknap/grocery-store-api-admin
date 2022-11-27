@@ -1,1 +1,1 @@
-# grocery-store-user
+# grocery-store-admin side
