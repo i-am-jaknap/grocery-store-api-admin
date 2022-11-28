@@ -126,7 +126,7 @@ exports.delete= async (req,res)=>{
             try{
                 const product=await Product.findById(this.parameters.param);
                 if(product)
-                    await gcDeleter(product.images);
+                 gcDeleter(product.images);
                 else
                     throw {message:'No product found with given id.'}
                
@@ -185,7 +185,7 @@ const fetchAll= async (options)=>{
                 const product=await Product.findById(this.parameters.param);
 
                 if(product.images){
-                    await gcDeleter(product.images);
+                    gcDeleter(product.images);
                 }
            
            }catch(err){
