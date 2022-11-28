@@ -1,10 +1,8 @@
-const {Router}=require('express');
 const Admin=require('../model/admin');
 const jwt=require('jsonwebtoken');
 const bcrypt=require('bcrypt');
 
 
-const router=Router();
 
 exports.signup= async(req,res)=>{
 
@@ -13,7 +11,7 @@ exports.signup= async(req,res)=>{
     //check if email is already registered
     const oldAdmin=await Admin.findOne({email:admin.email});
     if(oldAdmin){
-        return res.status(409).json({message:'Admin already exist. Please login.'})
+        return res.status(409).json({message:'Admin already exist. Please signin.'})
     }
 
     //if not then create a new admin with the given data
@@ -60,3 +58,4 @@ exports.signin=async (req,res)=>{
 
     res.status(201).json({token})
 }
+

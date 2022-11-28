@@ -41,6 +41,11 @@ const userSchema=new Schema({
         type:String,
         default:'',
     },
+    status:{
+        type:Boolean,
+        default:true,
+    },
+
     orders:{
         type:[{order_id:String,product:String, price:Number, quantity:Number, status:String, image:String, status:String, description:String}],
 

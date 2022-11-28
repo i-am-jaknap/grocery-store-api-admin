@@ -14,8 +14,9 @@ const multipartMiddleware=multipart_upload({ STORAGE:'google-cloud',GC_PRIVATE_K
     
 
 
+router.use(auth);
 
-router.get('/',auth,productController.fetch);
+router.get('/',productController.fetch);
 
 router.get('/:value',productController.fetch);
 

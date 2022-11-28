@@ -90,8 +90,6 @@ exports.delete=async(req,res)=>{
                                                         }
                                                     });
 
-            console.log(updatedResult);
-
 
             if(updatedResult.modifiedCount>0){
                 return res.status(200).json({'message':"Order deleted successfully."});
