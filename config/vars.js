@@ -1,7 +1,7 @@
 const path=require('path');
 require('dotenv').config();
 
-const GC_PRIVATE_KEY=process.env.GOOGLE_CLOUD_PRIVATE_KEY ?rocess.env.GOOGLE_CLOUD_PRIVATE_KEY.replaceAll('"',''):'';
+const GC_PRIVATE_KEY=process.env.GOOGLE_CLOUD_PRIVATE_KEY ?process.env.GOOGLE_CLOUD_PRIVATE_KEY.replaceAll('"',''):'';
 
 module.exports={
     env:process.env.NODE_ENV,
