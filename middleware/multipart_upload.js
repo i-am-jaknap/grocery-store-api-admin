@@ -97,9 +97,13 @@ function mw(req,res,next){
 
    bb.on('file', async (name,file,info)=>{
 
+
         //getting the file name if it exists in the config 
         //or else generating a uniue uuid as a file name and setting the extension name
         let fileName=config.FILENAME || v4() + '.' + info.filename.split('.').pop();
+
+        console.log('uploading',fileName);
+
 
         //creating the fileURL  based on the type of storage preference
         let fileURL;

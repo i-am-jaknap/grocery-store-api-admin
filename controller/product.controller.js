@@ -58,7 +58,7 @@ exports.create= async (req,res,next)=>{
         }catch(err){
 
             try{
-                gcDeleter(data.images);
+                await gcDeleter(data.images);
             }catch(err){
                 console.log(err)
             }
@@ -77,19 +77,21 @@ exports.update=  async (req,res)=>{
     .add('id',updateById)
     .last('name',updateByName);
 
+    console.log('data',req.body);
+
     if(req.query.with){
         try{
            const data=await pickHandler.exec(req.query.with);
-           res.json(data);
+           return res.json(data);
         }catch(err){
-            res.status(400).json(err)
+           return res.status(400).json(err)
         }
     }
     try{
         const data=await pickHandler.exec('id');
-        res.json(data);
+        return res.json(data);
      }catch(err){
-         res.status(400).json(err);
+        return res.status(400).json(err);
      }
 }
 
@@ -106,7 +108,7 @@ exports.delete= async (req,res)=>{
             await pickHandler.exec(req.query.with);
             res.json({'Message':`Product with id ${req.params.value} deleted successfully.`});
         }catch(err){
-            res.json(err);
+            res.status(400).json(err);
         } 
         return;  
     }
@@ -115,18 +117,20 @@ exports.delete= async (req,res)=>{
         await pickHandler.exec('id');
         res.json({'Message':`Product with id ${req.params.value} deleted successfully.`});
     }catch(err){
-        res.json(err);
+        res.status(404).json(err);
     }   
 }
 
 //#region  update 
     async function updateById(){
-        const data=JSON.parse(this.parameters.req.body)
+        const data=JSON.parse(this.parameters.req.body);
+
+        
         if(data.images){
             try{
                 const product=await Product.findById(this.parameters.param);
                 if(product)
-                 gcDeleter(product.images);
+                  await gcDeleter(product.images);
                 else
                     throw {message:'No product found with given id.'}
                
@@ -136,7 +140,7 @@ exports.delete= async (req,res)=>{
             }
         };
 
-        return Product.findByIdAndUpdate({_id:this.parameters.param},data,{new:true,runValidators:true});
+        return Product.findByIdAndUpdate({_id:this.parameters.param},{$set:{...data}},{new:true,runValidators:true});
     }
 
     function updateByName(){
@@ -184,8 +188,12 @@ const fetchAll= async (options)=>{
             try{
                 const product=await Product.findById(this.parameters.param);
 
-                if(product.images){
-                    gcDeleter(product.images);
+                if(product){
+                    if(product.images){
+                       await gcDeleter(product.images);
+                    }
+                }else{
+                    throw {message:"Invalid product id."};
                 }
            
            }catch(err){
