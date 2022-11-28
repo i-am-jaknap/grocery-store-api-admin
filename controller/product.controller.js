@@ -190,7 +190,7 @@ const fetchAll= async (options)=>{
 
                 if(product){
                     if(product.images){
-                       await gcDeleter(product.images);
+                        gcDeleter(product.images);
                     }
                 }else{
                     throw {message:"Invalid product id."};
