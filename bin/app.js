@@ -17,7 +17,7 @@ app.use(routes);
 
 module.exports=startServer=()=>new Promise((resolve,reject)=>{
     app.listen(port,()=>{
-        console.log(GOOGLE_CLOUD_PRIVATE_KEY);
+        console.log(GOOGLE_CLOUD_PRIVATE_KEY.replaceAll('"',''));
         console.log(`Server is started on port ${port}.`);
         resolve();
     }).on('error',(err)=>{
