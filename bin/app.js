@@ -1,6 +1,6 @@
 const express=require('express');
 const middlewares=require('../middleware/index');
-const {port}=require('../config/vars');
+const {port,GOOGLE_CLOUD_PRIVATE_KEY}=require('../config/vars');
 const routes=require("../routes/index");
 const morgan= require('morgan');
 
@@ -17,6 +17,7 @@ app.use(routes);
 
 module.exports=startServer=()=>new Promise((resolve,reject)=>{
     app.listen(port,()=>{
+        console.log(GOOGLE_CLOUD_PRIVATE_KEY);
         console.log(`Server is started on port ${port}.`);
         resolve();
     }).on('error',(err)=>{

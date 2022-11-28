@@ -12,7 +12,6 @@ const multipartMiddleware=multipart_upload({ STORAGE:'google-cloud',GC_PRIVATE_K
             FOLDER_NAME:'products'
         });
     
-console.log(GOOGLE_CLOUD_PRIVATE_KEY);
 
 
 
