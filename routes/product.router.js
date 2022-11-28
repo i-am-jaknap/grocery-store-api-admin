@@ -9,7 +9,7 @@ const auth=require('../middleware/auth');
 const multipartMiddleware=multipart_upload({ STORAGE:'google-cloud',GC_PRIVATE_KEY:GOOGLE_CLOUD_PRIVATE_KEY,
             GC_CLIENT_EMAIL:GOOGLE_CLOUD_CLIENT_EMAIL,
             GC_BUCKET_NAME:GOOGLE_CLOUD_BUCKET_NAME,GC_PROJECT_ID:GOOGLE_CLOUD_PROJECT_ID,
-            FOLDER_NAME:'products-test'
+            FOLDER_NAME:'products'
         });
     
 
