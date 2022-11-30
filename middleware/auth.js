@@ -16,7 +16,7 @@ module.exports = async (req, res, next) => {
             //check if the admin is valid
             //if not then notify the user
             if(!admin){
-                return res.sendStatus(401);
+                return res.send(401).json({message:'Invalid authorization token.'});
             }
 
             //else let the request go ahead
@@ -24,7 +24,7 @@ module.exports = async (req, res, next) => {
         }
 
         if (req.body.email && req.body.email !== email) {
-            throw 'Invalid token.';
+            throw 'Invalid authorization token.';
         } else {
             next();
         }
