@@ -8,6 +8,7 @@ module.exports = async (req, res, next) => {
         const decodedToken = jwt.verify(token, process.env.SECRET_KEY);
         const email = decodedToken.email;
 
+        console.log(email);
         //check if email is not null
         if(email){
             const admin= await Admin.findOne({email:email},{status:1,_id:0});
