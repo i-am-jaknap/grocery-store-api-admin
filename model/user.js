@@ -1,6 +1,5 @@
 const mongoose =require('mongoose');
-const bcrypt=require('bcrypt')
-const Product=require('./product')
+const bcrypt=require('bcrypt');
 
 
 const Schema = mongoose.Schema;
@@ -8,6 +7,8 @@ const Schema = mongoose.Schema;
 
 
 const userSchema=new Schema({
+
+
     firstname:{
         type:String,
         require:[true,'First name is required.'],
@@ -47,14 +48,36 @@ const userSchema=new Schema({
     },
 
     orders:{
-        type:[{order_id:String,product:String, price:Number, quantity:Number, status:String, image:String, status:String, description:String}],
+        type:[ new Schema
+                ({  order_id:String,
+                    product:String,
+                    product_id:String, 
+                    rate:Number,
+                    quantity:Number, 
+                    status:String, 
+                    image:String, 
+                    status:String, 
+                    description:String,
+                },
+                {versionKey:false,timestamps:true})
+            ],
 
     },
     cart:{
-        type:[{cart_item_id:String,product:String,price:Number,image:String,description:String}],
+        type:[
+                new Schema
+                ({  cart_item_id:String,
+                    product_id:String,
+                    product:String,
+                    rate:Number,
+                    image:String,
+                    description:String,
+                },
+                {versionKey:false,timestamps:true})
+            
+        ],
     }
-
-},{versionKey:false});
+},{versionKey:false,timestamps:true});
 
 userSchema.pre('save',  function(next){
 

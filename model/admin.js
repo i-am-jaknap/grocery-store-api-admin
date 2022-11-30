@@ -1,6 +1,5 @@
 const mongoose =require('mongoose');
 const bcrypt=require('bcrypt')
-const Product=require('./product')
 
 
 const Schema = mongoose.Schema;
@@ -8,7 +7,7 @@ const Schema = mongoose.Schema;
 
 
 const adminSchema=new Schema({
-    firstname:{
+      firstname:{
         type:String,
         require:[true,'First name is required.'],
         lowercase:true,
@@ -35,7 +34,7 @@ const adminSchema=new Schema({
         required:[true,'Password is required.'],
     },
 
-},{versionKey:false});
+},{versionKey:false,timestamps:true});
 
 adminSchema.pre('save',  function(next){
 

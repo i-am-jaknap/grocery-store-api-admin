@@ -32,7 +32,10 @@ exports.fetch=async(req,res,next)=>{
     //finding and sending the order based on order id
     if( (using==='' && value) || (using ==="order_id" && value)){
         try{
-            const order= await Order.findOne({order_id:value});
+            const order= await Order.findOne({order_id:value})
+                                    .sort({createdAt:-1,updatedAt:-1})
+                                    .select({createdAt:0,updatedAt:0,_id:0});
+
             //check if any order found
             if(order){
                 return res.status(200).json(order);  
@@ -49,7 +52,9 @@ exports.fetch=async(req,res,next)=>{
     }else if(using === 'email' && value){
 
         try{
-            const orders=await User.findOne({email:value},{"orders":1,_id:0});
+            const orders=await User.findOne({email:value})
+                                    .sort({createdAt:-1,updatedAt:-1})
+                                    .select({_id:0,'orders._id':0,'orders.createdAt':0,'orders.updatedAt':0})
 
             if(orders){
                 return res.status(200).json(orders.orders);
@@ -63,7 +68,10 @@ exports.fetch=async(req,res,next)=>{
     }
     //otherwise return all the orders
     try{
-        const orders=await Order.find();
+        const orders=await Order.find()
+                        .sort({createdAt:-1,updatedAt:-1})
+                        .select({createdAt:0,updatedAt:0,_id:0});
+
         return res.status(200).json(orders);  
     }catch(err){
         return next(err);
@@ -92,7 +100,7 @@ exports.delete=async(req,res)=>{
 
 
             if(updatedResult.modifiedCount>0){
-                return res.status(200).json({'message':"Order deleted successfully."});
+                return res.sendStatus(204);
             }
         }      
 

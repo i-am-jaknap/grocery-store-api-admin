@@ -17,8 +17,8 @@ exports.signup= async(req,res)=>{
     //if not then create a new admin with the given data
     try{
         const newAdmin=new Admin({... admin})
-        const data=await newAdmin.save();
-        res.json(data);
+        await newAdmin.save();
+        res.sendStatus(201);
 
     }catch(err){
         let errors={};

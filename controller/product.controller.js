@@ -24,17 +24,28 @@ exports.fetch = async (req,res)=>{
         if(req.query.with){
             try{
                 const data= await pickHandler.exec(req.query.with);
-                res.json(data);
+
+                //check if anything found
+                if(data.length<=0){
+                   return res.sendStatus(404);
+                }
+
+                return res.json(data);
             }catch(err){
-                res.json({'message':err.message});
+                res.status(500).json({'message':err.message});
             }
             return;
         }
         try{
             const data= await pickHandler.exec('id');
-            res.json(data);
+             //check if anything found
+             if(data.length<=0){
+                return res.sendStatus(404);
+             }
+
+            return res.json(data);
         }catch(err){
-            res.json({'message':err.message});
+            return res.status(500).json({'message':err.message});
         }
     }else{
         try{
@@ -53,16 +64,16 @@ exports.create= async (req,res,next)=>{
     try{
         const productModel=new Product(data);
         try{
-            const savedDoc= await productModel.save();
-            res.json(savedDoc);
+            await productModel.save();
+            return res.sendStatus(201);
         }catch(err){
 
             try{
                 await gcDeleter(data.images);
             }catch(err){
-                console.log(err)
+                console.log(err);
             }
-            res.status(400).json({message:err.message})
+           return  res.status(500).json({message:err.message});
         }
     }catch(err){
         next(err);
@@ -84,14 +95,14 @@ exports.update=  async (req,res)=>{
            const data=await pickHandler.exec(req.query.with);
            return res.json(data);
         }catch(err){
-           return res.status(400).json(err)
+           return res.status(500).json(err)
         }
     }
     try{
-        const data=await pickHandler.exec('id');
-        return res.json(data);
+        await pickHandler.exec('id');
+        return res.sendStatus(204);
      }catch(err){
-        return res.status(400).json(err);
+        return res.status(500).json(err);
      }
 }
 
@@ -106,18 +117,21 @@ exports.delete= async (req,res)=>{
 
         try{
             await pickHandler.exec(req.query.with);
-            res.json({'Message':`Product with id ${req.params.value} deleted successfully.`});
+            return res.sendStatus(204);
+            // res.json({'Message':`Product with id ${req.params.value} deleted successfully.`});
         }catch(err){
-            res.status(400).json(err);
+            res.status(500).json(err);
         } 
         return;  
     }
 
     try{
         await pickHandler.exec('id');
-        res.json({'Message':`Product with id ${req.params.value} deleted successfully.`});
+        // res.json({'Message':`Product with id ${req.params.value} deleted successfully.`});
+        return res.sendStatus(204);
+
     }catch(err){
-        res.status(404).json(err);
+        res.status(500).json(err);
     }   
 }
 
@@ -128,7 +142,7 @@ exports.delete= async (req,res)=>{
         
         if(data.images){
             try{
-                const product=await Product.findById(this.parameters.param);
+                const product=await Product.findOne({product_id:this.parameters.param});
                 if(product)
                   await gcDeleter(product.images);
                 else
@@ -140,7 +154,7 @@ exports.delete= async (req,res)=>{
             }
         };
 
-        return Product.findByIdAndUpdate({_id:this.parameters.param},{$set:{...data}},{new:true,runValidators:true});
+        return Product.findOneAndUpdate({product_id:this.parameters.param},{$set:{...data}},{new:true,runValidators:true});
     }
 
     function updateByName(){
@@ -153,11 +167,16 @@ exports.delete= async (req,res)=>{
 //#region  fetch
 
     function fetchById(){
-        return   Product.find({_id:this.parameters})
+        return   Product.find({product_id:this.parameters})
+                        .sort({createdAt:-1,updatedAt:-1})
+                        .select({createdAt:0,updatedAt:0,_id:0});
     }
 
     function fetchByName(){
-        return   Product.find({name:new RegExp(this.parameters,'i')});
+        return   Product.find({name:new RegExp(this.parameters,'i')})
+                        .sort({createdAt:-1,updatedAt:-1})
+                        .select({createdAt:0,updatedAt:0,_id:0});
+                        
     }
 
 
@@ -172,7 +191,11 @@ const fetchAll= async (options)=>{
         perPage= perPage <= 0 ? 10 : perPage;
 
 
-       return Product.find().limit(perPage).skip(start);       
+       return Product.find()
+                     .sort({createdAt:-1,updatedAt:-1})
+                     .select({createdAt:0,updatedAt:0,_id:0})
+                     .limit(perPage)
+                     .skip(start);       
     }catch(err){
         console.log(err);
        throw err;
@@ -186,7 +209,7 @@ const fetchAll= async (options)=>{
 
     async function deleteById(){
             try{
-                const product=await Product.findById(this.parameters.param);
+                const product=await Product.findOne({product_id:this.parameters.param});
 
                 if(product){
                     if(product.images){
@@ -200,7 +223,7 @@ const fetchAll= async (options)=>{
                 console.log(err);
                 throw err;
             }
-            return Product.deleteOne({_id:this.parameters.param});
+            return Product.deleteOne({product_id:this.parameters.param});
         }
 
     

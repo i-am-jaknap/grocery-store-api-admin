@@ -12,14 +12,12 @@ exports.fetch=async(req,res,next)=>{
       //finding and sending the product of a cart  by using user email
     if( email ){
         try{
-            const cart= await User.findOne({email:email},{_id:0,cart:1});
+            const cart= await User.findOne({email:email})
+                                    .select({"cart.createdAt":0,"cart.updatedAt":0,"cart._id":0});
             
             //check if the user is valid or not
             if(cart){
-                console.log('shoulnt execute');
-
-                
-                return res.status(200).json(cart.cart);  
+               return res.status(200).json(cart.cart);  
             }
 
             return res.status(404).json({message:"invalid email."});  
@@ -31,7 +29,9 @@ exports.fetch=async(req,res,next)=>{
 
     //otherwise fetch all the product from the cart
     try{
-        const cart=await Cart.find();
+        const cart=await Cart.find({},{createdAt:0,updatedAt:0,_id:0})
+                            .sort({createdAt:-1,updatedAt:-1})
+                            .select();;
         return res.status(200).json(cart);  
     }catch(err){
         return next(err);

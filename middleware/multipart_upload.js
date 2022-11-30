@@ -170,7 +170,16 @@ function mw(req,res,next){
     //getting the normal fields
     bb.on('field',(name,value,info)=>{
 
-        formdata[name]=value;
+        //checking if field already available if so then make it an array
+        if(formdata[name]){
+            if(Array.isArray(formdata[name]))
+                formdata[name]=[...formdata,value]
+            else
+                formdata[name]=Array(formdata[name],value);
+        }
+        else {
+            formdata[name]=value;
+        }
     })
 
     //handling the error events

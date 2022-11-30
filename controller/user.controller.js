@@ -9,7 +9,10 @@ exports.fetch=async(req,res,next)=>{
 
     if(!value && using.toLocaleLowerCase()==='all'){
         try{
-            const users= await User.find({},{orders:0,cart:0});
+            const users= await User.find({},{orders:0,cart:0})
+                                    .sort({createdAt:-1,updatedAt:-1})
+                                    .select({createdAt:0,updatedAt:0});
+
                 return res.status(200).json(users);
         }catch(err){
             return res.status(500).json({message:"Something went wrong."});
@@ -17,11 +20,14 @@ exports.fetch=async(req,res,next)=>{
 
     }else if(value && using.toLocaleLowerCase()==='email'){
         try{
-            const user= await User.findOne({email:value},{orders:0,cart:0});
+            const user= await User.findOne({email:value},{orders:0,cart:0})
+                                    .sort({createdAt:-1,updatedAt:-1})
+                                    .select({createdAt:0,updatedAt:0});
+                                    
             if(user){
                 return res.status(200).json(user);
             }
-            return res.status(204).json({message:"Invalid email."});
+            return res.status(404).json({message:"Invalid email."});
 
         }catch(err){
             console.log(err);
@@ -39,11 +45,12 @@ exports.update=async (req,res)=>{
 
     try{
         if(!action || action.toLocaleLowerCase() ==='block_user'){
-           const updateUser=await User.findOneAndUpdate({email:email},{$set:{status:false}},{new:true}).select({orders:0,cart:0});
-           return res.json(updateUser);
+           await User.findOneAndUpdate({email:email},{$set:{status:false}},{new:true})
+           return res.sendStatus(204);
+
         }else if(action ==='unblock_user'){
-            const updateUser=await User.findOneAndUpdate({email:email},{$set:{status:true}},{new:true}).select({orders:0,cart:0});
-            return res.json(updateUser);
+           const updateUser=await User.findOneAndUpdate({email:email},{$set:{status:true}},{new:true});
+           return res.sendStatus(204);
         }
     }catch(err){
         return res.status(500).json({message:"Something went wrong!"});
