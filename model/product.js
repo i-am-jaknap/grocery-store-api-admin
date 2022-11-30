@@ -7,8 +7,7 @@ const productSchema= new Schema({
 
     product_id:{
         type:String,
-        default:uuid.v4(),
-        unique:true
+        unique:true,
     },
 
     name:{
@@ -17,11 +16,11 @@ const productSchema= new Schema({
     },
     rate:{
         type:Schema.Types.Number,
-        required:[true,'Price is required.']
+        required:[true,'Rate is required.']
     },
     stock:{
         type:Schema.Types.Number,
-        required:[true,'Quantity is required.']
+        required:[true,'Stock is required.']
 
     },
     unit:{
@@ -48,6 +47,14 @@ const productSchema= new Schema({
     images:Schema.Types.Array || String,
 
 },{versionKey:false,timestamps:true});
+
+//creating the new product id
+productSchema.pre('save',function(next){
+    if(this.isNew){
+        this.product_id=uuid.v4();
+    }
+    next();
+});
 
 const Product=mongoose.model('Product',productSchema);
 
