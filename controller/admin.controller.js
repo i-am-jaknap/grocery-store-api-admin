@@ -18,7 +18,7 @@ exports.signup= async(req,res)=>{
     try{
         const newAdmin=new Admin({... admin})
         await newAdmin.save();
-        res.sendStatus(201);
+        res.status(201).json({message:"Signed up successfully"});
 
     }catch(err){
         let errors={};
