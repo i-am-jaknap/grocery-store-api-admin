@@ -46,11 +46,11 @@ exports.update=async (req,res)=>{
     try{
         if(!action || action.toLocaleLowerCase() ==='block_user'){
            await User.findOneAndUpdate({email:email},{$set:{status:false}},{new:true})
-           return res.sendStatus(204);
+           return res.status(200).json({message:"User blocked."});
 
         }else if(action ==='unblock_user'){
            const updateUser=await User.findOneAndUpdate({email:email},{$set:{status:true}},{new:true});
-           return res.sendStatus(204);
+           return res.status(200).json({message:"User unblocked."});
         }
     }catch(err){
         return res.status(500).json({message:"Something went wrong!"});

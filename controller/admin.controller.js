@@ -18,15 +18,15 @@ exports.signup= async(req,res)=>{
     try{
         const newAdmin=new Admin({... admin})
         await newAdmin.save();
-        res.sendStatus(201);
+        res.status(201).json({message:'Signed up successfully.'});
 
     }catch(err){
-        let errors={};
-        console.log(err.message);
-        for(let e in err.errors){
-            errors[e]=err.errors[e].message;
-        }
-        res.status(400).json(errors);
+    //    ` let errors={};
+    //     console.log(err.message);
+    //     for(let e in err.errors){
+    //         errors[e]=err.errors[e].message;
+    //     }`
+        res.status(400).json({message:"Please check your input."});
     }   
 }
 

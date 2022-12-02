@@ -27,7 +27,7 @@ exports.fetch = async (req,res)=>{
 
                 //check if anything found
                 if(data.length<=0){
-                   return res.sendStatus(404);
+                   return res.status(404).json({message:"Not found"});
                 }
 
                 return res.json(data);
@@ -40,8 +40,8 @@ exports.fetch = async (req,res)=>{
             const data= await pickHandler.exec('id');
              //check if anything found
              if(data.length<=0){
-                return res.sendStatus(404);
-             }
+                return res.status(404).json({message:"Not found"});
+            }
 
             return res.json(data);
         }catch(err){
@@ -65,7 +65,7 @@ exports.create= async (req,res,next)=>{
         const productModel=new Product(data);
         try{
             await productModel.save();
-            return res.sendStatus(201);
+            return res.status(201).json({message:'Order created.'});
         }catch(err){
 
             try{
@@ -100,7 +100,7 @@ exports.update=  async (req,res)=>{
     }
     try{
         await pickHandler.exec('id');
-        return res.sendStatus(204);
+        return res.status(204).json({message:"Updated successfully."});
      }catch(err){
         return res.status(500).json(err);
      }
@@ -117,7 +117,7 @@ exports.delete= async (req,res)=>{
 
         try{
             await pickHandler.exec(req.query.with);
-            return res.sendStatus(204);
+            return res.status(200).json({message:"Deleted successfully"});
             // res.json({'Message':`Product with id ${req.params.value} deleted successfully.`});
         }catch(err){
             res.status(500).json(err);
@@ -128,7 +128,7 @@ exports.delete= async (req,res)=>{
     try{
         await pickHandler.exec('id');
         // res.json({'Message':`Product with id ${req.params.value} deleted successfully.`});
-        return res.sendStatus(204);
+        return res.status(204).json({message:"Deleted Successfully."});
 
     }catch(err){
         res.status(500).json(err);
