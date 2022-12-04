@@ -128,7 +128,7 @@ exports.delete= async (req,res)=>{
     try{
         await pickHandler.exec('id');
         // res.json({'Message':`Product with id ${req.params.value} deleted successfully.`});
-        return res.status(204).json({message:"Deleted Successfully."});
+        return res.status(200).json({message:"Deleted Successfully."});
 
     }catch(err){
         res.status(500).json(err);
