@@ -65,7 +65,7 @@ exports.create= async (req,res,next)=>{
         const productModel=new Product(data);
         try{
             await productModel.save();
-            return res.status(201).json({message:'Order created.'});
+            return res.status(201).json({message:'Product created.'});
         }catch(err){
 
             try{
