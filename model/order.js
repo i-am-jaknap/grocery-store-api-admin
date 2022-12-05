@@ -37,12 +37,6 @@ const orderSchema=new Schema({
         type:String,
     },
 
-    description:{
-        type:String,   
-        lowercase: true,
-        default:'' 
-    },
-
     user:{
         type:Schema.Types.String,
         require:[true,'Email is required.'],
