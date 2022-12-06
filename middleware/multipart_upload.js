@@ -175,7 +175,7 @@ function mw(req,res,next){
         //checking if field already available if so then make it an array
         if(formdata[name]){
             if(Array.isArray(formdata[name]))
-                formdata[name]=[...formdata,value]
+                formdata[name]=[...formdata[name],value]
             else
                 formdata[name]=Array(formdata[name],value);
         }
