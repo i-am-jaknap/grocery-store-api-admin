@@ -73,7 +73,7 @@ exports.fetch=async(req,res,next)=>{
                         .select({createdAt:0,updatedAt:0,_id:0,"products._id":0,"products.createdAt":0,"products.updatedAt":0});
         
         
-
+        console.log(orders);
         return res.status(200).json(orders);  
     }catch(err){
         return next(err);

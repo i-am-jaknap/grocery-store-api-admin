@@ -6,7 +6,7 @@ const {Storage}=require('@google-cloud/storage');
 
 
 //global configuration object
-let config={};
+let config={}; 
 
 //upload on google cloud storage
  async function getGoogleCloudFileReference(GC_PROJECT_ID,GC_PRIVATE_KEY, GC_CLIENT_EMAIL , GC_BUCKET_NAME,FOLDER_NAME,FILE_NAME){
@@ -152,7 +152,9 @@ function mw(req,res,next){
         
         //uploading the file to intended location
         file.pipe(streamRef);
-
+        
+        console.log(formdata)
+       
         //setting the form data value 
         //which to be passed further
         if(formdata[name]){
@@ -173,7 +175,7 @@ function mw(req,res,next){
         //checking if field already available if so then make it an array
         if(formdata[name]){
             if(Array.isArray(formdata[name]))
-                formdata[name]=[...formdata[name],value]
+                formdata[name]=[...formdata,value]
             else
                 formdata[name]=Array(formdata[name],value);
         }
