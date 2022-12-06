@@ -7,40 +7,38 @@ const orderSchema=new Schema({
         unique:true,
         requred:true
     },
-    product:{
-        type:String,
-        required:[true,"Product name is required."]
-    },
+    products:[
+        new Schema({
+            product_id:{
+                type:String,
+                required:[true,"Product id is required."]
+            },
 
-    product_id:{
-        type:String,
-        required:[true,"Product id is required."]
-    },
+            product:{
+                type:String,
+                required:[true,"Product name is required."]
+            },
 
-    rate:{
-        type:Number,
-        required:[true,"Product price is required."],
-    },
+            rate:{
+                type:Number,
+                required:[true,"Product rate is required."],
+            },
 
-    quantity:{
-        type:Number,
-        required:[true,"Quantity is required."],
-    },
+            quantity:{
+                type:Number,
+                required:[true,"Quantity is required."],
+            },
+
+            image:{
+                type:String,
+            },
+        },{versionKey:false,timestamps:true})
+    ],
 
     status:{
         type:String,
         required:[true,"Order status is required."],
         lowercase:true,
-    },
-
-    image:{
-        type:String,
-    },
-
-    description:{
-        type:String,   
-        lowercase: true,
-        default:'' 
     },
 
     user:{
