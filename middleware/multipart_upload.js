@@ -152,7 +152,9 @@ function mw(req,res,next){
         
         //uploading the file to intended location
         file.pipe(streamRef);
-
+        
+        console.log(formdata)
+       
         //setting the form data value 
         //which to be passed further
         if(formdata[name]){
