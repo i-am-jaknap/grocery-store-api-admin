@@ -100,7 +100,7 @@ exports.update=  async (req,res)=>{
     }
     try{
         await pickHandler.exec('id');
-        return res.status(204).json({message:"Updated successfully."});
+        return res.status(200).json({message:"Product updated successfully."});
      }catch(err){
         return res.status(500).json(err);
      }
