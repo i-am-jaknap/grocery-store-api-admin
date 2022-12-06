@@ -176,7 +176,7 @@ function mw(req,res,next){
         if(formdata[name]){
             if(Array.isArray(formdata[name])){
                      console.log("Eroor")
-                formdata[name]=[...formdata,value]
+                formdata[name]=[...formdata[name],value]
             }
             else
                 formdata[name]=Array(formdata[name],value);
