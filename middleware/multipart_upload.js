@@ -159,7 +159,7 @@ function mw(req,res,next){
         //which to be passed further
         if(formdata[name]){
             if(Array.isArray(formdata[name]))
-                formdata[name]=[...formdata,fileURL]
+                formdata[name]=[...formdata[name],fileURL]
             else
                 formdata[name]=Array(formdata[name],fileURL);
         }
