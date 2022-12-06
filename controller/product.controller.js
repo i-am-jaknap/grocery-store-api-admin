@@ -61,8 +61,6 @@ exports.fetch = async (req,res)=>{
 exports.create= async (req,res,next)=>{
     const data=JSON.parse(req.body);
     console.log(data)
-
-    console.log(data)
     try{
         const productModel=new Product(data);
         try{
