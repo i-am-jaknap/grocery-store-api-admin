@@ -6,7 +6,7 @@ const {Storage}=require('@google-cloud/storage');
 
 
 //global configuration object
-let config={};
+let config={}; 
 
 //upload on google cloud storage
  async function getGoogleCloudFileReference(GC_PROJECT_ID,GC_PRIVATE_KEY, GC_CLIENT_EMAIL , GC_BUCKET_NAME,FOLDER_NAME,FILE_NAME){
