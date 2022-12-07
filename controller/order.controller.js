@@ -34,7 +34,7 @@ exports.fetch=async(req,res,next)=>{
         try{
             const order= await Order.findOne({order_id:value})
                                     .sort({createdAt:-1,updatedAt:-1})
-                                    .select({createdAt:0,updatedAt:0,_id:0});
+                                    .select({_id:0,"products._id":0,"products.createdAt":0,"products.updatedAt":0});
 
             //check if any order found
             if(order){
@@ -54,7 +54,7 @@ exports.fetch=async(req,res,next)=>{
         try{
             const orders=await User.findOne({email:value})
                                     .sort({createdAt:-1,updatedAt:-1})
-                                    .select({_id:0,'orders._id':0,'orders.createdAt':0,'orders.updatedAt':0})
+                                    .select({_id:0,'orders._id':0,"orders.products.createdAt":0,"orders.products.updatedAt":0})
 
             if(orders){
                 return res.status(200).json(orders.orders);
@@ -70,7 +70,7 @@ exports.fetch=async(req,res,next)=>{
     try{
         const orders=await Order.find()
                         .sort({createdAt:-1,updatedAt:-1})
-                        .select({createdAt:0,updatedAt:0,_id:0,"products._id":0,"products.createdAt":0,"products.updatedAt":0});
+                        .select({_id:0,"products._id":0,"products.createdAt":0,"products.updatedAt":0});
         
         
         console.log(orders);
