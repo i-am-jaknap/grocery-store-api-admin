@@ -11,7 +11,7 @@ exports.fetch=async(req,res,next)=>{
         try{
             const users= await User.find({},{orders:0,cart:0})
                                     .sort({createdAt:-1,updatedAt:-1})
-                                    .select({createdAt:0,updatedAt:0});
+                                    .select({createdAt:0,updatedAt:0,password:0});
 
                 return res.status(200).json(users);
         }catch(err){
@@ -22,7 +22,7 @@ exports.fetch=async(req,res,next)=>{
         try{
             const user= await User.findOne({email:value},{orders:0,cart:0})
                                     .sort({createdAt:-1,updatedAt:-1})
-                                    .select({createdAt:0,updatedAt:0});
+                                    .select({createdAt:0,updatedAt:0,password:0});
                                     
             if(user){
                 return res.status(200).json(user);
