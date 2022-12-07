@@ -13,7 +13,7 @@ exports.update=async(req,res)=>{
         await User.findOneAndUpdate({email:orders.user},{$set:{"orders.$[order].status":req.body.status}},
         {arrayFilters:[{'order.order_id':req.params.orderId}]});
 
-        res.status(204).json({'message':'Order cancelled'});
+        res.status(200).json({'message':'Order '+ req.body.status + "."});
         
     }catch(err){
         res.status(400).json({"message":"Invalid order."});
