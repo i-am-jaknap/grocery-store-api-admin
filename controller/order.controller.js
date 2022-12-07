@@ -54,7 +54,7 @@ exports.fetch=async(req,res,next)=>{
         try{
             const orders=await User.findOne({email:value})
                                     .sort({createdAt:-1,updatedAt:-1})
-                                    .select({_id:0,'orders._id':0,"orders.products.createdAt":0,"orders.products.updatedAt":0})
+                                    .select({_id:0,'orders.prouducts._id':0,'orders._id':0,"orders.products.createdAt":0,"orders.products.updatedAt":0})
 
             if(orders){
                 return res.status(200).json(orders.orders);
